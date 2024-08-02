@@ -1,24 +1,44 @@
 import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+//VIEWS
+import Dashboard from "./views/Dashboard";
+
+//PAGES
+import Home from "./pages/Home"
+import Podcast from "./pages/Podcast"
+import { useState } from 'react';
+
+const routes = [
+  {
+    path: "*",
+    name: "Dashboard",
+    component: Home
+  },
+  {
+    path: "/podcast/:podcastId",
+    name: "Podcast",
+    component: Podcast
+}
+]
 
 function App() {
+
+  const [loading, setLoading] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Dashboard loading={loading}>
+        <Routes>
+          {
+            routes.map((route, index) => {
+              return(<Route key={`routeKey-${index}`} path={route.path} element={<route.component handleLoading={ (status) => {setLoading(status)}}/>} />);
+            })
+          }
+        </Routes>
+      </Dashboard>
+    </BrowserRouter>
   );
 }
 
