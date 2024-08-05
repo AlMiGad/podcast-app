@@ -83,7 +83,7 @@ function Podcast(props) {
 
         document.title = podcastData["im:name"].label + " in Podcaster";
 
-    }, []);
+    }, [podcastId, props]);
 
 
     return (

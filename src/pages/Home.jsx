@@ -128,6 +128,8 @@ function Home(props) {
                                     <PodcastCard podcast={podcast}></PodcastCard>
                                 </Grid>
                             );
+                        }else{
+                            return null;
                         }
 
                     })

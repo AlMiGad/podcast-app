@@ -47,7 +47,7 @@ function Episode( props ){
 
         
 
-    }, []);
+    }, [episodeId, podcastId, props]);
 
     return(
         
