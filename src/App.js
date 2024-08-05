@@ -1,6 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from 'react';
 
 //VIEWS
 import Dashboard from "./views/Dashboard";
@@ -8,7 +8,7 @@ import Dashboard from "./views/Dashboard";
 //PAGES
 import Home from "./pages/Home"
 import Podcast from "./pages/Podcast"
-import { useState } from 'react';
+import Episode from "./pages/Episode"
 
 const routes = [
   {
@@ -20,7 +20,12 @@ const routes = [
     path: "/podcast/:podcastId",
     name: "Podcast",
     component: Podcast
-}
+  },
+  {
+    path: "/podcast/:podcastId/episode/:episodeId",
+    name: "Episode",
+    component: Episode
+  }
 ]
 
 function App() {

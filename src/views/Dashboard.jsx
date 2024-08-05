@@ -13,7 +13,7 @@ const Wrapper = styled.div`
     font-weight: 700;
     font-size: 1.3em;
     a{
-      color: #0047AB;
+      color: #157b9b;
       text-decoration: none
     }
   `;
@@ -32,7 +32,7 @@ function Dashboard({ loading, children }) {
               <Link to="/">Podcaster</Link>
             </Grid>
             <Grid key={"app-title-tools"} item xs={4} container justifyContent="flex-end" alignItems="center">
-              {loading && <div class="loader"></div>}
+              {loading && <div className="loader"></div>}
             </Grid>
           </Grid>
         </Container>

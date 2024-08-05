@@ -22,7 +22,7 @@ const PodcastTitle = styled.h2`
         text-transform: uppercase;
         font-weight: 700;
         font-size: 1.1em;
-        color: #133b8c;
+        color: #157b9b;
     `;
 const PodcastAuthor = styled.p`
         color: #7d7d7d;
@@ -59,13 +59,11 @@ function Home(props) {
     useEffect(() => {
         // Decidiremos si es necesario hacer la peticion a la API de APPLE
         // si no es necesario recuperamos los datos del local storage
-        
+
+        document.title = "Podcaster - Enjoy Podcasts";
         props.handleLoading(true); //Activamos el icono de carga
 
         if (necessaryUpdate()) {
-
-            const todayString = (new Date()).toISOString().split('T')[0]; // Formato YYYY-MM-DD
-            localStorage.setItem("lastUpdate", todayString);
 
             // Definir la URL para la llamada a la API
             const url = 'https://itunes.apple.com/us/rss/toppodcasts/limit=100/genre=1310/json';
@@ -78,12 +76,18 @@ function Home(props) {
                         throw new Error('Network response was not ok');
                     }
                     const data = await response.json();
-                    localStorage.setItem("podcastsData", JSON.stringify(data.feed.entry));
-                    setPodcasts(data.feed.entry);
+
+                    //Organizamos los podcasts en base a su id para optimizar la busqueda
+                    let organizedPodcasts = organizePodcasts(data.feed.entry);
+                    localStorage.setItem("podcastsData", JSON.stringify(organizedPodcasts));
+                    //Actualizamos la fecha de actualizacion
+                    const todayString = (new Date()).toISOString().split('T')[0]; // Formato YYYY-MM-DD
+                    localStorage.setItem("lastUpdate", todayString);
+
+                    setPodcasts(organizedPodcasts);
+
                 } catch (error) {
                     console.log(error);
-                } finally {
-                    props.handleLoading(false); // Deja de mostrar el spinner cuando los datos estén listos
                 }
             };
 
@@ -92,11 +96,12 @@ function Home(props) {
         } else {
 
             setPodcasts(JSON.parse(localStorage.getItem("podcastsData")));
-            props.handleLoading(false);// Deja de mostrar el spinner cuando los datos estén listos
 
         }
 
-    }, []);
+        props.handleLoading(false);// Deja de mostrar el spinner cuando los datos estén listos
+
+    }, [props]);
 
     return (
         <div>
@@ -115,7 +120,7 @@ function Home(props) {
                     />
                 </Grid>
                 {
-                    podcasts && podcasts.map((podcast, index) => {
+                    podcasts && Object.values(podcasts).map((podcast, index) => {
                         //Filtro sencillo para filtrar por nombre y autor
                         if (filterText === "" || (filterText !== "" && (textContains(podcast["im:name"].label, filterText) || textContains(podcast["im:artist"].label, filterText)))) {
                             return (
@@ -156,6 +161,17 @@ function necessaryUpdate() {
     }
 
     return necessaryUpdate;
+}
+
+function organizePodcasts(rawPodcasts) {
+
+    let organizedPodcasts = {};
+
+    rawPodcasts.forEach(rawPodcast => {
+        organizedPodcasts = { ...organizedPodcasts, ["p-" + rawPodcast["id"].attributes["im:id"]]: rawPodcast };
+    });
+
+    return organizedPodcasts;
 }
 
 export default Home;

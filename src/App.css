@@ -4,6 +4,10 @@ body{
 
 a{
   text-decoration: none!important;
+  color: #157b9b;
+}
+a:hover{
+  color: #0095BD;
 }
 
 .App {
@@ -51,7 +55,7 @@ a{
   margin-right: 20px;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: #0047AB;
+  background: #0095BD;
   box-shadow: 0 0 0 0 #0004;
   animation: l1 1s infinite;
 }
